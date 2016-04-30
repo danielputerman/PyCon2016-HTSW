@@ -1,0 +1,10 @@
+# IntelliJ project files
+.idea
+
+# pyenv
+.python-version
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
