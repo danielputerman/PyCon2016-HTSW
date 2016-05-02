@@ -1,7 +1,8 @@
 from selenium import webdriver
+from webdriver_recorder import Recorder
 
-browser = webdriver.Firefox()
-
+recorder = Recorder()
+browser = recorder.start(webdriver.Firefox())
 try:
     browser.get('http://il.pycon.org/2016/')
 
@@ -17,4 +18,6 @@ try:
     browser.find_element_by_id('waitlisted_person_name').send_keys('Selenium WebDriver')
 
 finally:
+    recorder.close()
     browser.quit()
+    print(recorder.export())
