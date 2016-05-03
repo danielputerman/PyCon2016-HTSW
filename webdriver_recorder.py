@@ -60,13 +60,6 @@ class RecordingWebElement(object):
         self.element = element
         self._recorder = recorder
         self._driver = driver
-        # MONKEY PATCH ALERT! Replacing implementation of the underlying driver with ours. We'll put the original
-        # methods back before destruction.
-        self._original_methods = {}
-        for method_name in self._METHODS_TO_REPLACE:
-            self._original_methods[method_name] = getattr(element, method_name)
-            setattr(element, method_name, getattr(self, method_name))
-
         # Copies the web element's interface
         create_proxy_interface(self, element, self._READONLY_PROPERTIES)
         # Setting properties
@@ -78,7 +71,7 @@ class RecordingWebElement(object):
         Returns a WebElement denoted by "By".
         """
         # Get element from the original implementation of the underlying driver.
-        element = self._original_methods['find_element'](by, value)
+        element = self.element['find_element'](by, value)
         # Wrap the element.
         if element:
             element = RecordingWebElement(self._recorder, self._driver, element)
@@ -89,7 +82,7 @@ class RecordingWebElement(object):
         Returns a list of web elements denoted by "By".
         """
         # Get result from the original implementation of the underlying driver.
-        elements_list = self._original_methods['find_elements'](by, value)
+        elements_list = self.element['find_elements'](by, value)
         # Wrap all returned elements.
         if elements_list:
             updated_list = []
